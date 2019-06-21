@@ -45,10 +45,11 @@ var UIController = (function () {
         pClass: 'p',
         h3Class: 'h1',
         imgClass: 'img',
-        spanID: '#span'
+        spanID: '#span',
+        btnClassName: 'btn'
     };
 
-
+    //HTML input tags 
     var container = document.querySelector('.container');
     var span = document.querySelector('#span');
     var description = document.querySelector('#search');
@@ -56,42 +57,37 @@ var UIController = (function () {
 
     return {
 
-        deleteBtn: function () {
-            span.textContent = '';
-        },
-        //===============================
+        //=============================== function for creating a movie posters
         createMovies: function (obj, imgUrl) {
 
             for (let i = 0; i < obj.results.length; i++) {
                 var box = document.createElement('div');
-                box.className = 'box';
+                box.className = DOMStrings.boxClass;
                 var imgBox = document.createElement('div');
-                imgBox.className = 'imgBox';
+                imgBox.className = DOMStrings.imgBoxClass;
                 var img = document.createElement('img');
-                img.className = 'img';
+                img.className = DOMStrings.imgClass;
                 var details = document.createElement('div');
-                details.className = 'details';
+                details.className = DOMStrings.detailsClass;
                 var content = document.createElement('div');
-                content.className = 'content';
+                content.className = DOMStrings.contentClass;
                 var h4 = document.createElement('h4');
-                h4.className = 'h4';
+                h4.className = DOMStrings.h4Class;
                 var p = document.createElement('p');
-                p.className = 'p';
+                p.className = DOMStrings.pClass;
                 var p1 = document.createElement('p');
-                p1.className = 'p';
+                p1.className = DOMStrings.pClass;
                 var h3 = document.createElement('h3');
-                h3.className = 'h1';
+                h3.className = DOMStrings.h3Class;
                 var h31 = document.createElement('h3');
-                h31.className = 'h1';
+                h31.className = DOMStrings.h3Class;
                 var btn = document.createElement('button');
-                btn.className = 'btn';
+                btn.className = DOMStrings.btnClassName;
 
                 var poster = imgUrl + obj.results[i].poster_path;
-
                 var title = obj.results[i].original_title;
                 var vote = obj.results[i].vote_average;
                 var release = obj.results[i].release_date;
-
 
                 img.src = !obj.results[i].poster_path ? 'no-image.jpeg' : poster;
 
@@ -105,23 +101,24 @@ var UIController = (function () {
                 container.append(box);
                 box.append(imgBox, details);
                 imgBox.appendChild(img);
-
                 details.appendChild(content);
                 content.append(h4, p, h3, p1, h31, btn)
             };
         },
-
-
-        //===============
+        //=============== 
         loadBtn: function () {
             span.textContent = '';
             var loadSpan = document.createElement('div');
             loadSpan.id = 'loaSpan';
             span.append(loadSpan);
             var btn = document.createElement('button');
-            btn.className = 'btn';
+            btn.className = DOMStrings.btnClassName;
             loadSpan.append(btn);
             btn.textContent = "LOAD MORE...";
+        },
+        //========================
+        deleteBtn: function () {
+            span.textContent = '';
         },
         //===================
         resetSearch: function () {
@@ -152,19 +149,24 @@ var UIController = (function () {
 })();
 
 
+
+
+
+
+
 //===============================Global app controller.====================================
 //=========================================================================================
 
 var controller = (function (UICtrl, dataCtrl) {
 
     UICtrl.getDOMTags().description.addEventListener('keypress', function () {
-        var dataAjaxUrl = dataCtrl.getAjaxUrl();
-        var inputData = UICtrl.getInput();
+
+
         var imagePtah = dataCtrl.getAjaxUrl().image_Path;
         if (event.key === "Enter") {
-            if (dataAjaxUrl.pageCount === 1 && inputData.description) {
+            if (dataCtrl.getAjaxUrl().pageCount === 1 && UICtrl.getInput().description) {
                 var data = new XMLHttpRequest();
-                var ajaxUrl = dataCtrl.getAjaxUrl().ajaxUrlMovie + UICtrl.getInput().value + dataCtrl.getDataStr().apiKeyStr + dataCtrl.getAjaxUrl().ApiKey + dataCtrl.getDataStr().query + inputData.description + dataCtrl.getDataStr().page + dataCtrl.getAjaxUrl().pageCount;
+                var ajaxUrl = dataCtrl.getAjaxUrl().ajaxUrlMovie + UICtrl.getInput().value + dataCtrl.getDataStr().apiKeyStr + dataCtrl.getAjaxUrl().ApiKey + dataCtrl.getDataStr().query + UICtrl.getInput().description + dataCtrl.getDataStr().page + dataCtrl.getAjaxUrl().pageCount;
                 data.open('get', ajaxUrl);
                 data.send();
                 data.onreadystatechange = function () {
@@ -178,7 +180,7 @@ var controller = (function (UICtrl, dataCtrl) {
                             UICtrl.deleteBtn();
                     }
                 };
-            } else if (inputData.description === '')
+            } else if (UICtrl.getInput().description === '')
                 UICtrl.resetSearch();
         }
     });
