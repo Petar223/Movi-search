@@ -1,2 +1,2 @@
-# Movi-search abended
+# Movi-search stopped project
 School project
