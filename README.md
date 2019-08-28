@@ -1,2 +1,2 @@
-# Movi-search stopped project
+# Movi-search mvc
 School project
